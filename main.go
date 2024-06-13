@@ -19,7 +19,7 @@ type VideoInfo struct {
 }
 
 func main() {
-	videoURL := "https://youtu.be/tSjnf6l8cq8?si=z4mD_v6sKvCY7ift" // Replace with your desired video URL
+	videoURL := "https://youtu.be/XyUsMV6nCCw?si=98M7jPbQHQjnOzF-" // Replace with your desired video URL
 
 	videoInfo, err := getVideoInfo(videoURL)
 	if err != nil {
@@ -105,9 +105,23 @@ func downloadVideo(videoURL string, filename string) error {
 	}
 	defer outFile.Close()
 
-	_, err = io.Copy(outFile, resp.Body)
-	if err != nil {
-		return err
+	// Use a buffer to read and write in chunks
+	buffer := make([]byte, 1024*1024) // 1MB buffer
+	for {
+		// Read a chunk of data from the response body
+		n, err := resp.Body.Read(buffer)
+		if err != nil && err != io.EOF {
+			return err
+		}
+		if n == 0 {
+			break
+		}
+
+		// Write the chunk to the output file
+		_, err = outFile.Write(buffer[:n])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
