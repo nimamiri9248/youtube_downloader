@@ -19,8 +19,9 @@ type VideoInfo struct {
 }
 
 func main() {
-	videoURL := "https://youtu.be/XyUsMV6nCCw?si=98M7jPbQHQjnOzF-" // Replace with your desired video URL
-
+	fmt.Print("Enter your url: ")
+	var videoURL string
+	fmt.Scanln(&videoURL)
 	videoInfo, err := getVideoInfo(videoURL)
 	if err != nil {
 		log.Fatalf("Failed to get video info: %v", err)
